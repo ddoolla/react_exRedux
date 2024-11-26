@@ -31,3 +31,11 @@
 ```
 
 <br/>
+
+---
+
+> ## Redux 저장소 (store) 설정
+
+### \* configureStore
+
+- Redux Toolkit 의 스토어 설정 프로세스 간소화 API
