@@ -1,6 +1,6 @@
 import { createSlice, isAction } from "@reduxjs/toolkit";
 
-// 카운터 기능에 대한 Redux 로직
+// 슬라이스 정의
 export const counterSlice = createSlice({
   name: "counter",
   initialState: {
@@ -8,30 +8,24 @@ export const counterSlice = createSlice({
   },
   reducers: {
     increment: (state) => {
-      state.value += 1; // 상태 변경
+      state.value += 1;
     },
+
     decrement: (state) => {
-      state.value -= 1; // 상태 변경
+      state.value -= 1;
     },
-    // action 객체의 payload 파라미터 값으로 state 변경
+
     incrementByAmount: (state, action) => {
       state.value += action.payload;
     },
   },
 });
 
+// 액션 생성자 함수
 export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
-/*  
-  * thunk 함수
-    - 비동기 로직을 포함할 수 있는 Redux 함수
-    - 인수: 입력 데이터
-    - 반환 값: 함수 (인수: dispatch, getState)
-*/
-
-// thunk 함수를 생성하고 반환하는 외부 생성자 함수
+// thunk 함수
 export const incrementAsync = (amount) => {
-  // 내부 thunk 함수
   return (dispatch) => {
     setTimeout(() => {
       dispatch(incrementByAmount(amount));
@@ -39,7 +33,8 @@ export const incrementAsync = (amount) => {
   };
 };
 
-// store.js 에 정의된 counter 슬라스의 상태 값을 정의 ?
+// 선택자 함수
 export const selectCount = (state) => state.counter.value;
 
+// 슬라이스의 리듀서 반환
 export default counterSlice.reducer;
