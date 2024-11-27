@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../components/counterSlice.js"; // export default counterSlice.reducer;
+import counterReducer from "./components/Counter/counterSlice.js"; // export default counterSlice.reducer;
 
 /* 
   * Redux 스토어 인스턴스 생성

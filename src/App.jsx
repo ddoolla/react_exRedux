@@ -1,5 +1,5 @@
 import "./App.css";
-import Counter from "./components/Counter";
+import Counter from "./components/Counter/Counter";
 /*  
   1. 스토어 생성
   2. 슬라이스 생성

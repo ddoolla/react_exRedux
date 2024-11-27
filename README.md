@@ -39,3 +39,39 @@
 ### \* configureStore
 
 - Redux Toolkit 의 스토어 설정 프로세스 간소화 API
+- 루트 리듀서를 사용하려 Redux 스토어 생성  
+  (원래는 루트리듀서에 슬라이스 리듀서를 결합하여 스토어 파일에 가져와야 함)
+- thunk 미들웨어 등 각종 미들웨어 자동 추가
+- Redux DevTools Extension 자동 연결 설정 (상태 관리 디버깅 브라우저 확장도구)
+
+```
+// src/store.js
+import { configureStore } from '@reduxjs/toolkit';
+
+const store = configureStore({
+    reducer: {
+        ... //
+    }
+});
+
+export default store;
+```
+
+<br/>
+
+```
+// main.jsx
+...
+import { Provider } from "react-redux";
+import store from "./store.js";
+
+createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+```
+
+<br/>
+
+---

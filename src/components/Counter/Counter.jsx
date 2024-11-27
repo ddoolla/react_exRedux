@@ -7,7 +7,7 @@ import {
   selectCount,
 } from "./counterSlice";
 import { useState } from "react";
-import store from "../stores/store";
+import store from "../../store";
 
 const Counter = () => {
   /*  
