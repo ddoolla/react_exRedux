@@ -36,7 +36,9 @@ const todosSlice = createSlice({
       },
     },
     todoDeleted(state, action) {
-      delete state.entities[action.payload];
+      state.entities = state.entities.filter(
+        (todo) => todo.id !== action.payload
+      );
     },
     allTodosCompleted(state, action) {
       Object.values(state.entities).forEach((todo) => {
@@ -55,9 +57,9 @@ const todosSlice = createSlice({
       state.status = "loading";
     },
     todosLoaded(state, action) {
-      const newEntities = {};
+      const newEntities = [];
       action.payload.forEach((todo) => {
-        newEntities[todo.id] = todo;
+        newEntities.push(todo);
       });
       state.entities = newEntities;
       state.status = "idle";
@@ -79,16 +81,17 @@ export const {
 export default todosSlice.reducer;
 
 // thunk function
-export const fetchTodos = async (dispatch) => {
-  dispatch(todosLoading);
+export const fetchTodos = () => (dispatch) => {
+  dispatch(todosLoading());
   const fetchedTodos = localStorage.getItem("todos");
 
   if (!fetchedTodos) {
+    dispatch(todosLoaded([]));
     return;
   }
 
   const parsedTodos = JSON.parse(fetchedTodos);
-  dispatch(todosLoaded(parsedTodos));
+  dispatch(todosLoaded(parsedTodos.entities));
 };
 
 export const saveNewTodo = ({ id, text }) => {
