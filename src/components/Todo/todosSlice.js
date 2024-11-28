@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: "idle",
-  entities: {},
+  entities: [],
 };
 
 const todosSlice = createSlice({
@@ -10,8 +10,13 @@ const todosSlice = createSlice({
   initialState,
   reducers: {
     todoAdded(state, action) {
-      const todo = action.payload;
-      state.entities[todo.id] = todo;
+      const { id, text } = action.payload;
+      state.entities.push({
+        id,
+        text,
+        completed: false,
+        color: "",
+      });
     },
 
     todoToggled(state, action) {
@@ -71,3 +76,30 @@ export const {
 } = todosSlice.actions;
 
 export default todosSlice.reducer;
+
+// thunk function
+export const fetchTodos = async (dispatch) => {
+  dispatch(todosLoading);
+  const fetchedTodos = localStorage.getItem("todos");
+
+  if (!fetchedTodos) {
+    return;
+  }
+
+  const parsedTodos = JSON.parse(fetchedTodos);
+  dispatch(todosLoaded(parsedTodos));
+};
+
+export const saveNewTodo = ({ id, text }) => {
+  return (dispatch, getState) => {
+    const initialData = { id, text };
+    dispatch(todoAdded(initialData));
+    localStorage.setItem("todos", JSON.stringify(getState().todos));
+  };
+};
+
+const selectTodoEntities = (state) => state.todos.entities;
+
+export const selectTodos = createSelector(selectTodoEntities, (entities) =>
+  Object.values(entities)
+);
