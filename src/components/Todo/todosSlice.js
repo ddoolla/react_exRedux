@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  entities: [],
-  status: null,
+  status: "idle",
+  entities: {},
 };
 
 const todosSlice = createSlice({
@@ -10,33 +10,64 @@ const todosSlice = createSlice({
   initialState,
   reducers: {
     todoAdded(state, action) {
-      state.entities.push(action.payload);
+      const todo = action.payload;
+      state.entities[todo.id] = todo;
     },
 
     todoToggled(state, action) {
-      const todo = state.entities.find((todo) => todo.id === action.payload);
+      const todoId = action.payload;
+      const todo = state.entities[todoId];
       todo.completed = !todo.completed;
     },
-    todoLoading(state, action) {
-      return {
-        ...state,
-        status: "loading",
-      };
+    todoColorSelected: {
+      reducer(state, action) {
+        const { color, todoId } = action.payload;
+        state.entities[todoId].color = color;
+      },
+      prepare(todoId, color) {
+        return {
+          payload: { todoId, color },
+        };
+      },
+    },
+    todoDeleted(state, action) {
+      delete state.entities[action.payload];
+    },
+    allTodosCompleted(state, action) {
+      Object.values(state.entities).forEach((todo) => {
+        todo.completed = true;
+      });
+    },
+    completedTodosCleared(state, action) {
+      Object.values(state.entities).forEach((todo) => {
+        if (todo.completed) {
+          delete state.entities[todo.id];
+        }
+      });
+    },
+    todosLoading(state, action) {
+      state.status = "loading";
+    },
+    todosLoaded(state, action) {
+      const newEntities = {};
+      action.payload.forEach((todo) => {
+        newEntities[todo.id] = todo;
+      });
+      state.entities = newEntities;
+      state.status = "idle";
     },
   },
 });
 
-export const { todoAdded, todoToggled, todoLoading } = todosSlice.actions;
+export const {
+  todoAdded,
+  todoToggled,
+  todoColorSelected,
+  todoDeleted,
+  allTodosCompleted,
+  completedTodosCleared,
+  todosLoading,
+  todosLoaded,
+} = todosSlice.actions;
 
 export default todosSlice.reducer;
-
-/* 
-    todoAdded 를 보면 push() 를 사용해서 배열 요소를 추가하고있다.
-    
-    Redux 를 사용하지 않으면 스프레드 연산자를 이용해서 기존 배열을 복사하면서
-    추가해야한다.
-
-    Redux 는 Immer 라이브러리를 사용하여 모든 변경사항을 추적 후 변경 사항 목록을 사용하여
-    업데이트된 불변 값을 반환한다
-
-*/
