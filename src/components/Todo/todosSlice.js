@@ -31,16 +31,6 @@ export const { todoAdded, todoToggled, todoLoading } = todosSlice.actions;
 export default todosSlice.reducer;
 
 /* 
-    * todoSlice.actions.todoToggled
-        - 액션 객체 생성자 함수 -> 액션 객체를 자동 생성한다.
-        - 하나의 인수를 허용하고, 액션 객체의 payload 파라미터에 저장한다.
-
-        ex) console.log(todoToddled(42)); 
-        // { type: 'todos/todoToggled', payload: 42 } 
-        -> todoToggled(42) 호출 시 생성되는 액션 객체
-*/
-
-/* 
     todoAdded 를 보면 push() 를 사용해서 배열 요소를 추가하고있다.
     
     Redux 를 사용하지 않으면 스프레드 연산자를 이용해서 기존 배열을 복사하면서

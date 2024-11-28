@@ -50,10 +50,11 @@
 ```
 // src/store.js
 import { configureStore } from '@reduxjs/toolkit';
+import { someReducer } from '/someSlice';
 
 const store = configureStore({
     reducer: {
-        slice: sliceReducer, // 슬라이스에서 가져온 리듀서를 결합한다.
+        some: someReducer, // 슬라이스의 리듀서를 결합한다.
         ...
     }
 });
@@ -92,10 +93,7 @@ ex) Counter 관련 -> counterSlice 에서 상태 및 리듀서 관리
 - Redux Toolkit 에서 제공하는 리듀서 로직과 동작을 단순화하는 API
 - 기본 케이스에서 자동으로 기존 상태를 반환한다. (switch~case 문 default 에 해당하는 상태)
 - 안전하게 상태를 변형시킬 수 있다.
-
-※ Immer - 불변성 (immutable) 관리 작업을 자동으로 처리해주는 라이브러리
-
-Redux Toolkit 은 Immer 라이브러리를 내장하고 있으며, Immer 은 모든 변경사항을 추적하고 해당 변경 사항 목록을 사용하여 불변 로직을 작성한 것처럼 안전하게 업데이트된 불변 값을 반환한다.
+- 변경 불가능한 업데이트를 쉽게 작성할 수 있다.
 
 <br/>
 
@@ -124,9 +122,34 @@ export const { actionFuc1, actionFunc2 } = someSlice.actions;
 // 선택자 함수
 export const selectCount = (state) => state.some.value;
 
-// 슬라이스의 리듀서
+// 슬라이스의 리듀서 -> 스토어에 추가
 export default someSlice.reducer;
 ```
+
+<br/>
+
+### ※ createSlice 를 사용하면 변경 불가능한 업데이트를 쉽게 작성할 수 있다?
+
+#### \* 배열 상태에 객체 추가 예시)
+
+```
+// 기존 리듀서 (switch-case)
+...
+case ADD_TODO:
+    return { ...state.todos, action.payload } // 원본 배열 복사
+...
+
+// createSlice 리듀서
+...
+addTodo: (state, action) => {
+    state.todos.push(action.payload) } // return문 X, 상태를 직접 수정
+...
+    // 상태를 직접 수정하는 것 처럼 작성해도 내부적으로 새로운 불변 값을 반환한다.
+```
+
+※ Immer - 불변성 (immutable) 관리 작업을 자동으로 처리해주는 라이브러리
+
+createSlice 함수는 Immer 라이브러리를 사용한다. Immer는 모든 변경사항을 추적하고 해당 변경 사항 목록을 사용하여 불변 로직을 작성한 것처럼 안전하게 업데이트된 불변 값을 반환한다.
 
 <br/>
 
@@ -134,6 +157,7 @@ export default someSlice.reducer;
 
 - createSlice 함수는 리듀서 함수들에 해당하는 액션 생성자를 자동으로 생성한다.
 - 액션 생성자는 type, payload 를 파라미터를 갖는 액션 객체를 반환한다.
+- 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 파라미터에 전달한다.
 
 ```
 // 액션 생성자 구조 분해 할당
@@ -142,7 +166,7 @@ export const { actionFuc1, actionFunc2 } = someSlice.actions;
 // 액션 생성자 호출 -> 액션 객체 반환
 console.log(actionFunc1(1)); // {type: 'some/actionFunc1', payload: 1}
 
-dispatch(actionFunc1()); // dispatch 함수의 인수로 사용
+dispatch(actionFunc1(1)); // dispatch 함수의 인수로 사용
 dispatch({ type: 'some/actionFunc1', payload: 1 }); // 위와 같은 의미
 ```
 
