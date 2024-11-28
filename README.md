@@ -192,6 +192,23 @@ console.log(selectUser(store.getState()));
 
 <br/>
 
+### \* createSelector
+
+- reselect 라이브러리 함수 (Redux-ToolKit 패키지에 기본 포함)
+- memoized 된 선택자 함수를 만드는데 사용
+
+```
+const outputSelector = createSelector(
+    [inputSelector1, inputSelector2, ...], // 입력 선택자 함수 전달
+    resultFunc // 출력 선택자 함수 (결과 함수)
+)
+// arg1: 결과함수에 필요한 값 제공
+// arg2: 제공 받은 값을 사용하여 반환할 결과 로직 정의
+// return: memoized 된 선택자 함수 반환 (출력 선택자 함수)
+```
+
+<br/>
+
 ### \* thunk 함수
 
 - 동기, 비동기 로직을 모두 포함할 수 있는 특정 종류의 Redux 함수

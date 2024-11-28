@@ -40,6 +40,7 @@ const todosSlice = createSlice({
     },
     allTodosCompleted(state, action) {
       Object.values(state.entities).forEach((todo) => {
+        // Object.values => 객체 속성 값들을 배열로 변환
         todo.completed = true;
       });
     },
@@ -100,6 +101,14 @@ export const saveNewTodo = ({ id, text }) => {
 
 const selectTodoEntities = (state) => state.todos.entities;
 
-export const selectTodos = createSelector(selectTodoEntities, (entities) =>
-  Object.values(entities)
+export const selectTodos = createSelector(selectTodoEntities, (entities) => {
+  return Object.values(entities);
+});
+
+export const selectTodoById = (state, todoId) => {
+  return selectTodoEntities(state)[todoId];
+};
+
+export const selectTodoIds = createSelector(selectTodos, (todos) =>
+  todos.map((todo) => todo.id)
 );
