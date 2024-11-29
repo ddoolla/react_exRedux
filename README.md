@@ -112,6 +112,16 @@ const someSlice = createSlice({
         actionFunc2: (state, action) {
             state.value -= action.payload;
         },
+
+        // 액션 생성자의 payload 값 사용자 지정 방법
+        actionFun3: {
+            reducer: (state, action) => {
+                ...
+            },
+            prepare: (arg1, arg2) => {
+                return { payload: { arg1, arg2 } };
+            }
+        }
         ...
     }
 });
@@ -157,7 +167,8 @@ createSlice 함수는 Immer 라이브러리를 사용한다. Immer는 모든 변
 
 - createSlice 함수는 리듀서 함수들에 해당하는 액션 생성자를 자동으로 생성한다.
 - 액션 생성자는 type, payload 를 파라미터를 갖는 액션 객체를 반환한다.
-- 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 파라미터에 전달한다.
+- 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 파라미터에 전달한다.  
+  (액션객체 payload 에 여러 인수를 전달하는 방법은 createSlice 예시 참조)
 
 ```
 // 액션 생성자 구조 분해 할당
