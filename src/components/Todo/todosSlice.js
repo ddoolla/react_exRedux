@@ -80,7 +80,7 @@ export const {
 
 export default todosSlice.reducer;
 
-// thunk function
+// thunk 함수
 export const fetchTodos = () => (dispatch) => {
   dispatch(todosLoading());
   const fetchedTodos = localStorage.getItem("todos");
@@ -102,6 +102,7 @@ export const saveNewTodo = ({ id, text }) => {
   };
 };
 
+// 선택자 함수
 const selectTodoEntities = (state) => state.todos.entities;
 
 export const selectTodos = createSelector(selectTodoEntities, (entities) => {

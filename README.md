@@ -166,7 +166,7 @@ createSlice 함수는 Immer 라이브러리를 사용한다. Immer는 모든 변
 ### \* 액션 생성자
 
 - createSlice 함수는 리듀서 함수들에 해당하는 액션 생성자를 자동으로 생성한다.
-- 액션 생성자는 type, payload 를 파라미터를 갖는 액션 객체를 반환한다.
+- `액션 생성자는 (액션)type, payload 를 파라미터를 갖는 액션 객체를 반환한다.`
 - 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 파라미터에 전달한다.  
   (액션객체 payload 에 여러 인수를 전달하는 방법은 createSlice 예시 참조)
 
@@ -243,7 +243,98 @@ export const incrementAsync = (amount) => { // thunk 생성 함수
 
 <br/>
 
----
+### \* createAsyncThunk(type, payloadCreator)
+
+- Redux-Toolkit 에서 제공하는 thunk 생성 API
+- type: 비동기 요청 수명주기를 나타내는 작업(액션) 유형 접두사
+  - 대기(pending) 상태: 'type/pending'
+  - 이행(fulfilled) 상태: 'type/fulfilled'
+  - 거부(rejected) 상태: 'type/rejected'
+- payloadCreator: 비동기 작업을 정의하는 함수. 반환 값으로는 Promise 를 반환해야 한다.  
+  Promise 를 반환해야하기에 async / await 구문을 사용하여 작성한다.
+- 내부적으로 3개의 액션 생성자와 액션 유형, 호출 시 해당 액션을 자동으로 전송하는 thunk 함수를 생성한다.
+
+```
+// todosSlice - fetchTodos thunk 함수 예시
+
+// 일반적인 패턴으로 생성
+export const fetchTodos = () => {
+    return async (dispatch) => {
+        dispatch(todoLoading());
+        const response = await client.get('/fakeApi/todos');
+        dispatch(todosLoaded(response.todo));
+    }
+}
+---------------------------------------------------------------------
+
+// createAsyncThunk 사용해서 생성
+export const fetchTodos = createAsyncThunk('todos/fetchTodos'. async () => {
+    const response = await client.get('/fakeApi/todos');
+    return response.todos;
+});
+```
+
+<br/>
+
+### ※ 위 예시에서 자동생성되는 액션 생성자 및 액션 유형
+
+#### \* 액션 생성자
+
+- fetchTodos.pending
+- fetchTodos.fulfilled
+- fetchTodos.rejected
+
+#### \* 액션 유형 (type)
+
+- todos/fetchTodos/pending
+- todos/fetchTodos/fulfilled
+- todos/fetchTodos/rejected
+
+<br/>
+
+### \* fetchTodos thunk 함수 호출 프로세스
+
+1. pending 액션 dispatch
+2. payloadCreator 를 호출하고 처리되어 Promise 반환할 때까지 대기
+3. Promise 반환 값이 성공이면 fulfilled 액션 dispatch  
+   실패하면 rejected 액션 dispatch
+
+※ thunk 함수를 호출할 때, 하나의 인수만 전달 가능하다. 여러 값 전달이 필요하면 단일 객체로 전달해야한다.
+
+<br/>
+
+### \* 자동 생성된 액션들을 슬라이스 내부 리듀서에서 처리하려면 ?
+
+```
+// todosSlice.js
+
+const todosSlice = createSlice({
+    name: 'todos',
+    initialState,
+    reducer: {
+        ...
+    },
+    // 슬라이스 외부에서 발생한 리듀서 수신하고 처리
+    extraReducers: builder => {
+        builder
+            .addCase(fetchTodos.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchTodos.fulfilled, (state, action) => {
+                const newEntities = {};
+                action.payload.forEach(todo => {
+                    newEntities[todo.id] = todo'
+                });
+                state.entities = newEntities;
+                state.status = 'idle';
+            })
+            ... // 추가 외부 리듀서
+    }
+})
+
+```
+
+## <br/>
 
 > ## useSelector, useDispatch
 
