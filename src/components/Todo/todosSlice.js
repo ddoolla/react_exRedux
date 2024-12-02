@@ -82,6 +82,7 @@ export default todosSlice.reducer;
 
 // thunk 함수
 export const fetchTodos = () => (dispatch) => {
+  console.log("fetchTodos thunk called");
   dispatch(todosLoading());
   const fetchedTodos = localStorage.getItem("todos");
 

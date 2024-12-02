@@ -1,4 +1,4 @@
-import { createSlice, isAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 // 슬라이스 정의
 export const counterSlice = createSlice({
@@ -8,6 +8,7 @@ export const counterSlice = createSlice({
   },
   reducers: {
     increment: (state) => {
+      console.log("increment called");
       state.value += 1;
     },
 
@@ -26,6 +27,7 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
 // thunk 함수
 export const incrementAsync = (amount) => {
+  console.log("incrementAsync thunk called");
   return (dispatch) => {
     setTimeout(() => {
       dispatch(incrementByAmount(amount));
