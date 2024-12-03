@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Tuple } from "@reduxjs/toolkit";
 import counterReducer from "./components/Counter/counterSlice";
 import todosReducer from "./components/Todo/todosSlice";
 import { print1 } from "./exampleAddons/middleware";

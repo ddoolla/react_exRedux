@@ -1,5 +1,5 @@
 export const print1 = (storeAPI) => (next) => (action) => {
-  console.log("middleware print1() called");
+  console.log("1");
   return next(action);
 };
 

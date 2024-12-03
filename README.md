@@ -79,6 +79,95 @@ createRoot(document.getElementById("root")).render(
 
 <br/>
 
+### \* Store Enhancer (확장기, 강화기)
+
+- 스토어 기능 및 동작을 커스텀 할 수 있다.
+
+```
+// 사용법 - enhancers.js
+
+export const customEnhancer = (createStore) => {
+    return (rootReducer, preloadedState, enhancers) => {
+        const store = createStore(rootReducer, preloadedState, enhancers);
+
+        // store.dispatch 기능 확장
+        // dispatch 후 "Hi!" 를 콘솔에 출력
+        function newDispatch(action) {
+            const result = store.dispatch(action);
+            console.log("Hi!");
+            return result;
+        }
+
+        // store.getState 기능 확장
+        // store 상태에 항상 newVar: "Hi!" 필드 추가
+        function newGetState() {
+            return {
+                ...store.getState(),
+                newVar: "Hi!";
+            };
+        }
+
+        return { ...store, dispatch: newDispatch, getState: newGetState };
+    }
+}
+```
+
+<br/>
+
+### \* Middleware
+
+- 액션을 디스패치하는 순간과 리듀서에 도달하는 순간 사이에 확장 기능을 제공한다.
+
+```
+// 사용법 - middleware.js
+
+export const print1 = (storeAPI) => (next) => (action) => {
+    // 미들웨어 코드 작성
+    // storeAPI.getStore(), dispatch() 도 사용 가능
+    console.log("1");
+    return next(action); // 다음 미들웨어로 전달
+}
+
+export const print2 = (storeAPI) => (next) => (action) => {
+    console.log("2");
+    return next(action); // 다음 미들웨어로 전달
+}
+
+export const print3 = (storeAPI) => (next) => (action) => {
+    console.log("3");
+    return next(action); // 마지막에는 액션을 리듀서로 전달
+}
+```
+
+<br/>
+
+### \* middleware, enhancers - configureStore 적용 방법
+
+```
+// store.js
+import { customEnhancer } form '/enhancers';
+
+export default configureStore({
+    reducer: {
+        ...
+    },
+        // enhancers 보다 먼저 정의되어야 함
+        // 기본 미들웨어를 추가하고, 사용자정의 미들웨어 추가
+    middleware: (getDefaultMiddleware) => {
+        return [...getDefaultMiddleware(), ...middleware];
+    },
+        // 기본 확장기를 추가하고, 사용자정의 확장기를 추가
+    enhancers: (defaultEnhancers) => {
+        return [...defaultEnhancers(), customEnhancer];
+    }
+})
+```
+
+※ enhancers 가 middleware 처리 이후 스토어에 적용되기 때문에 middleware 가 먼저 정의되어야한다.  
+※ configureStore 는 일부 미들웨어, 확장기가 자동 추가되기에 기본을 먼저 추가하였다.
+
+<br/>
+
 ---
 
 > ## 2. 슬라이스(Slice) 생성
@@ -331,8 +420,11 @@ const todosSlice = createSlice({
             ... // 추가 외부 리듀서
     }
 })
-
 ```
+
+<br/>
+
+### \* createEntityAdapter
 
 ## <br/>
 

@@ -1,10 +1,12 @@
+import { createListenerMiddleware } from "@reduxjs/toolkit";
+
 export const sayHiOnDispatch = (createStore) => {
   return (rootReducer, preloadedState, enhancers) => {
     const store = createStore(rootReducer, preloadedState, enhancers);
 
     function newDispatch(action) {
-      console.log("Hi!");
       const result = store.dispatch(action);
+      console.log("Hi!");
       return result;
     }
 
