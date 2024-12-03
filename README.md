@@ -1,4 +1,4 @@
-# Redux 라이브러리
+# Redux-Toolkit 라이브러리
 
 > ## 개발 환경 설정
 
