@@ -426,6 +426,54 @@ const todosSlice = createSlice({
 
 ### \* createEntityAdapter
 
+- 데이터 객체 인스턴스를 포함하는 특정 유형의 구조를 갖는다.
+- CRUD 작업을 수행하기 위한 리듀서와 선택자 함수를 제공한다.
+
+```
+const entityAdapter = createEntityAdapter();
+
+// entityAdapter.getInitialState() 기본 구조
+{
+    ids: [], // 고유 id, 문자열 또는 숫자
+    entities: { ... } // id를 엔터티 객체에 매핑하는 조회 테이블
+}
+
+-----------------------------------------------------------------------------
+// 고유 id 지정 및 정렬 조건, 필드 추가 방법
+const entityAdapter = createEntityAdapter({
+    selectId: (entity) => entity.id, // id 말고 다른 필드도 지정 가능
+    sortComparer: (a, b) => a.id.localeCompare(b.id), // 정렬 조건
+    status: 'idle', // 새 필드 추가
+});
+```
+
+<br/>
+
+### \* CRUD 제공 함수
+
+```
+// ID에 해당하는 엔터티가 존재하지 않는 경우 추가
+addOne
+addMany
+
+// ID에 해당하는 엔터티가 존재하지 않으면 추가 / 존재하면 교체
+setOne
+setMany
+setAll
+
+// ID에 해당하는 엔터티 제거
+removeOne
+removeMany
+
+// ID에 해당하는 엔터티가 존재하면 소유하고 있는 필드 수정
+updateOne
+updateMany
+
+// ID에 해당하는 엔터티가 존재하면 얕은 병합 (없는 필드 추가) / 존재하지 않으면 추가
+upsertOne
+upsertMany
+```
+
 ## <br/>
 
 > ## useSelector, useDispatch
