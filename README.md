@@ -1,4 +1,4 @@
-# Redux-Toolkit 라이브러리
+# Redux 라이브러리
 
 > ## 개발 환경 설정
 
@@ -19,13 +19,15 @@
 
 ### 3. Redux Toolkit 설치
 
-- Redux 애플리케이션을 만들기에 필수적으로 여기는 패키지와 함수들 포함
+- 효율적인 Redux App 개발에 필수적으로 여기는 패키지와 함수들 포함
 
 ```
 > npm i @reduxjs/toolkit
 ```
 
 ### 4. Redux 설치
+
+- 예측, 유지 관리 가능한 글로벌 상태 관리를 위한 라이브러리
 
 ```
 > npm i react-redux
@@ -41,7 +43,7 @@
 
 - Redux Toolkit 의 스토어 설정 프로세스 간소화 API
 - 루트 리듀서를 사용하여 Redux 스토어 생성  
-  (원래는 루트리듀서에 슬라이스 리듀서를 결합하여 스토어 파일에 가져와야 함)
+  (원래는 루트 리듀서에 슬라이스 리듀서를 결합하여 스토어 파일에 가져와야 함)
 - thunk 미들웨어 등 각종 미들웨어 자동 추가
 - Redux DevTools Extension 자동 연결 설정 (상태 관리 디버깅 브라우저 확장도구)
 
@@ -255,8 +257,8 @@ createSlice 함수는 Immer 라이브러리를 사용한다. Immer는 모든 변
 ### \* 액션 생성자
 
 - createSlice 함수는 리듀서 함수들에 해당하는 액션 생성자를 자동으로 생성한다.
-- `액션 생성자는 (액션)type, payload 를 파라미터를 갖는 액션 객체를 반환한다.`
-- 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 파라미터에 전달한다.  
+- `액션 생성자는 (액션)type, payload 를 프로퍼티로 갖는 액션 객체를 반환한다.`
+- 액션 생성자 함수는 하나의 인수를 허용하고, 반환할 액션 객체의 payload 프로퍼티에 전달한다.  
   (액션객체 payload 에 여러 인수를 전달하는 방법은 createSlice 예시 참조)
 
 ```
@@ -269,6 +271,10 @@ console.log(actionFunc1(1)); // {type: 'some/actionFunc1', payload: 1}
 dispatch(actionFunc1(1)); // dispatch 함수의 인수로 사용
 dispatch({ type: 'some/actionFunc1', payload: 1 }); // 위와 같은 의미
 ```
+
+<br/>
+
+---
 
 <br/>
 
@@ -306,6 +312,10 @@ const outputSelector = createSelector(
 // arg2: 제공 받은 값을 사용하여 반환할 결과 로직 정의
 // return: memoized 된 선택자 함수 반환 (출력 선택자 함수)
 ```
+
+<br/>
+
+---
 
 <br/>
 
@@ -424,6 +434,10 @@ const todosSlice = createSlice({
 
 <br/>
 
+---
+
+<br/>
+
 ### \* createEntityAdapter
 
 - 데이터 객체 인스턴스를 포함하는 특정 유형의 구조를 갖는다.
@@ -453,28 +467,58 @@ const entityAdapter = createEntityAdapter({
 
 ```
 // ID에 해당하는 엔터티가 존재하지 않는 경우 추가
-addOne
-addMany
+addOne(state, entity | action)
+addMany(state, entities | action)
 
 // ID에 해당하는 엔터티가 존재하지 않으면 추가 / 존재하면 교체
-setOne
-setMany
-setAll
+setOne(state, entity | action)
+setMany(state, entities | action)
+setAll(state, entities | action)
 
 // ID에 해당하는 엔터티 제거
-removeOne
-removeMany
+removeOne(state, key: EntityId | action)
+removeMany(state, key: EntityId[] | action)
+removeAll(state)
 
 // ID에 해당하는 엔터티가 존재하면 소유하고 있는 필드 수정
-updateOne
-updateMany
+updateOne(state, Update | action) // Update: { id: <entityId>, changes: { ... } }
+updateMany(state, Update[] | action)
 
 // ID에 해당하는 엔터티가 존재하면 얕은 병합 (없는 필드 추가) / 존재하지 않으면 추가
-upsertOne
-upsertMany
+upsertOne(state, entities | action)
+upsertMany(state, entities | action)
 ```
 
-## <br/>
+#### ※ 액션을 전달하면 반환하는 액션객체의 payload 값으로 자동 처리
+
+<br/>
+
+### \* getInitialState
+
+- { ids: [], entities: { } } 와 같은 새로운 엔터티 상태 객체를 반환
+
+```
+// 인수로 전달한 값을 프로퍼티에 추가
+entityAdapter.getInitialState({ status: 'idle' });
+// {ids: [], entities: {}, status: 'idle'}
+
+// 목데이터 추가 가능
+entityAdapter.getInitialState(
+    {
+        status: 'idle'
+    },
+    [
+        { id: '1', title: 'First'},
+        { id: '2', title: 'Second'},
+    ]
+);
+```
+
+<br/>
+
+<br/>
+
+---
 
 > ## useSelector, useDispatch
 

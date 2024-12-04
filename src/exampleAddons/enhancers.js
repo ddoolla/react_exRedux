@@ -1,5 +1,3 @@
-import { createListenerMiddleware } from "@reduxjs/toolkit";
-
 export const sayHiOnDispatch = (createStore) => {
   return (rootReducer, preloadedState, enhancers) => {
     const store = createStore(rootReducer, preloadedState, enhancers);
