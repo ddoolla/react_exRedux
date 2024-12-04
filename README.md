@@ -1,5 +1,7 @@
 # Redux 라이브러리
 
+[참조] [Redux-Toolkit을 사용한 Modern Redux](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux)
+
 > ## 개발 환경 설정
 
 ### 1. React + Vite
@@ -14,7 +16,13 @@
 
 ```
 > npm i // npm install
+
 > npm i react-router-dom // 라우터 라이브러리 설치
+
+// 가짜 데이터 반환 API 서버 생성용 라이브러리
+> npm i miragejs
+> npm i @faker-js/faker
+> npm i seedrandom
 ```
 
 ### 3. Redux Toolkit 설치
