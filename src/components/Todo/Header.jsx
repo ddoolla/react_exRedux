@@ -16,7 +16,7 @@ const Header = () => {
 
     if (e.which === 13 && trimmedText) {
       setStatus("loading");
-      await dispatch(saveNewTodo(saveNewTodo(trimmedText)));
+      await dispatch(saveNewTodo(trimmedText));
 
       setText("");
       setStatus("idle");

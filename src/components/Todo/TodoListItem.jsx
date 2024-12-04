@@ -5,6 +5,7 @@ import {
   todoDeleted,
   todoToggled,
 } from "./todosSlice";
+import { availableColors, capitalize } from "./filters/colors";
 
 const TodoListItem = ({ id }) => {
   const todo = useSelector((state) => selectTodoById(state, id));
@@ -25,16 +26,28 @@ const TodoListItem = ({ id }) => {
     dispatch(todoDeleted(todo.id));
   };
 
+  const colorOptions = availableColors.map((color) => (
+    <option key={color} value={color}>
+      {capitalize(color)}
+    </option>
+  ));
+
   return (
     <li>
-      <div>
-        <div>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "10px" }}>
           <input
             type="checkbox"
             checked={completed}
             onChange={handleCompletedChanged}
           />
           <div>{text}</div>
+        </div>
+        <div>
+          <select value={color} style={{ color }} onChange={handleColorChanged}>
+            <option value=""></option>
+            {colorOptions}
+          </select>
         </div>
         <div>
           <button onClick={onDelete}>del</button>
