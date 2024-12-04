@@ -516,6 +516,29 @@ entityAdapter.getInitialState(
 
 <br/>
 
+### \* 선택자 함수 (Selector Function)
+
+- EntityAdapter 가 제공하는 getSelector 함수는 엔터티 상태 객체를 읽을 수 있는 선택자 함수 세트를 반환한다.
+
+```
+// 선택자 함수 세트
+selectIds(state) - state.ids 배열을 반환
+selectEntities(state) - state.entities 반환
+selectAll(state) - state.ids 배열에 매핑을 수행하고 동일 순서로 entities 배열 반환
+selectTotal(state) - 해당 상태에 저장된 엔터티의 총 수를 반환
+selectById(state, id) - id에 해당하는 엔터티 또는 'undefined' 반환
+
+-----------------------------------------------------------------------------
+
+// 사용 예시 - 인수 전달 X
+const simpleSelectors = getSelector(); // 전체 선택자 함수 반환
+simpleSelectors.selectIds(store.getState().users); // 사용 시 상태를 전달
+
+// 사용 예시 - 인수 전달 O (일반적)
+const usersSelectors = getSelector(state => state.users);
+userSelectors.selectAll(store.getState());
+```
+
 <br/>
 
 ---
