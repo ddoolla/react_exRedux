@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store.js";
 import { fetchTodos } from "./components/Todo/todosSlice.js";
+import "./api/server.js"; // 가짜 서버 추가
 
 store.dispatch(fetchTodos());
 

@@ -4,7 +4,6 @@ import { saveNewTodo } from "./todosSlice";
 
 const Header = () => {
   const [text, setText] = useState("");
-  const idRef = useRef(0);
   const [status, setStatus] = useState("idle");
   const dispatch = useDispatch();
 
@@ -17,7 +16,7 @@ const Header = () => {
 
     if (e.which === 13 && trimmedText) {
       setStatus("loading");
-      await dispatch(saveNewTodo({ id: idRef.current++, text: trimmedText }));
+      await dispatch(saveNewTodo(saveNewTodo(trimmedText)));
 
       setText("");
       setStatus("idle");

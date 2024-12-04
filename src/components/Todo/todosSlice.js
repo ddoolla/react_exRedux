@@ -1,24 +1,37 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
+import { client } from "../../api/client";
 
-const initialState = {
-  status: "idle",
-  entities: [],
-};
+const todosAdapter = createEntityAdapter();
 
+const initialState = todosAdapter.getInitialState({
+  status: "idle", // 비활성 상태
+});
+
+// Thunk 함수
+export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
+  const response = await client.get("/fakeApi/todos");
+  return response.todos;
+});
+
+export const saveNewTodo = createAsyncThunk(
+  "todos/saveNewTodo",
+  async (text) => {
+    const initialTodo = { text };
+    const response = await client.post("/fakeApi/todos", { todo: initialTodo });
+    return response.todo;
+  }
+);
+
+// 슬라이스
 const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    todoAdded(state, action) {
-      const { id, text } = action.payload;
-      state.entities.push({
-        id,
-        text,
-        completed: false,
-        color: "",
-      });
-    },
-
     todoToggled(state, action) {
       const todoId = action.payload;
       const todo = state.entities[todoId];
@@ -35,84 +48,44 @@ const todosSlice = createSlice({
         };
       },
     },
-    todoDeleted(state, action) {
-      state.entities = state.entities.filter(
-        (todo) => todo.id !== action.payload
-      );
-    },
+    todoDeleted: todosAdapter.removeOne,
     allTodosCompleted(state, action) {
       Object.values(state.entities).forEach((todo) => {
-        // Object.values => 객체 속성 값들을 배열로 변환
         todo.completed = true;
       });
     },
     completedTodosCleared(state, action) {
-      Object.values(state.entities).forEach((todo) => {
-        if (todo.completed) {
-          delete state.entities[todo.id];
-        }
-      });
+      const completedIds = Object.values(state.entities)
+        .filter((todo) => todo.completed)
+        .map((todo) => todo.id);
+      todosAdapter.removeMany(state, completedIds);
     },
-    todosLoading(state, action) {
-      state.status = "loading";
-    },
-    todosLoaded(state, action) {
-      const newEntities = [];
-      action.payload.forEach((todo) => {
-        newEntities.push(todo);
-      });
-      state.entities = newEntities;
-      state.status = "idle";
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTodos.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTodos.fulfilled, (state, action) => {
+        todosAdapter.setAll(state, action.payload);
+        state.status = "idle";
+      })
+      .addCase(saveNewTodo.fulfilled, todosAdapter.addOne);
   },
 });
 
 export const {
-  todoAdded,
-  todoToggled,
-  todoColorSelected,
-  todoDeleted,
   allTodosCompleted,
   completedTodosCleared,
-  todosLoading,
-  todosLoaded,
+  todoColorSelected,
+  todoDeleted,
+  todoToggled,
 } = todosSlice.actions;
 
 export default todosSlice.reducer;
 
-// thunk 함수
-export const fetchTodos = () => (dispatch) => {
-  console.log("fetchTodos thunk called");
-  dispatch(todosLoading());
-  const fetchedTodos = localStorage.getItem("todos");
-
-  if (!fetchedTodos) {
-    dispatch(todosLoaded([]));
-    return;
-  }
-
-  const parsedTodos = JSON.parse(fetchedTodos);
-  dispatch(todosLoaded(parsedTodos.entities));
-};
-
-export const saveNewTodo = ({ id, text }) => {
-  return (dispatch, getState) => {
-    const initialData = { id, text };
-    dispatch(todoAdded(initialData));
-    localStorage.setItem("todos", JSON.stringify(getState().todos));
-  };
-};
-
-// 선택자 함수
-const selectTodoEntities = (state) => state.todos.entities;
-
-export const selectTodos = createSelector(selectTodoEntities, (entities) => {
-  return Object.values(entities);
-});
-
-export const selectTodoById = (state, todoId) => {
-  return selectTodoEntities(state)[todoId];
-};
+export const { selectAll: selectTodos, selectById: selectTodoById } =
+  todosAdapter.getSelectors((state) => state.todos);
 
 export const selectTodoIds = createSelector(selectTodos, (todos) =>
   todos.map((todo) => todo.id)

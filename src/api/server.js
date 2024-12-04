@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Server, Model, Factory, hasMany, RestSerializer } from "miragejs";
+
 import seedrandom from "seedrandom";
 
 const IdSerializer = RestSerializer.extend({
@@ -53,7 +54,7 @@ const generateTodoText = () => {
 new Server({
   routes() {
     this.namespace = "fakeApi";
-    this.timing = 2000;
+    //this.timing = 2000
 
     this.resource("todos");
     this.resource("lists");
