@@ -20,6 +20,7 @@ const Counter = () => {
 
   return (
     <div>
+      <h1>Counter</h1>
       <div>
         <button onClick={() => dispatch(increment())}>+</button>
         <span>{count}</span>

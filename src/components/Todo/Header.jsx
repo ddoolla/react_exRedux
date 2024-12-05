@@ -28,6 +28,7 @@ const Header = () => {
 
   return (
     <header>
+      <h1>Todos</h1>
       <input
         type="text"
         placeholder="What needs to be done?"

@@ -5,6 +5,7 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { client } from "../../api/client";
+import { StatusFilters } from "./filters/filtersSlice";
 
 const todosAdapter = createEntityAdapter();
 
@@ -89,4 +90,31 @@ export const { selectAll: selectTodos, selectById: selectTodoById } =
 
 export const selectTodoIds = createSelector(selectTodos, (todos) =>
   todos.map((todo) => todo.id)
+);
+
+export const selectFilteredTodos = createSelector(
+  selectTodos,
+  (state) => state.filters,
+  (todos, filters) => {
+    const { status, colors } = filters;
+    const showAllCompletions = status === StatusFilters.All;
+
+    if (showAllCompletions && colors.length === 0) {
+      return todos;
+    }
+
+    const completedStatus = status === StatusFilters.Completed;
+
+    return todos.filter((todo) => {
+      const statusMatches =
+        showAllCompletions || todo.completed === completedStatus;
+      const colorMatches = colors.length === 0 || colors.includes(todo.color);
+      return statusMatches && colorMatches;
+    });
+  }
+);
+
+export const selectFilteredTodoIds = createSelector(
+  selectFilteredTodos,
+  (filterdTodos) => selectFilteredTodos.map((todo) => todo.id)
 );

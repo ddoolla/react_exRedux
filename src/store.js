@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./components/Counter/counterSlice";
 import todosReducer from "./components/Todo/todosSlice";
+import filtersReducer from "./components/Todo/filters/filtersSlice";
 import { print1, print2, print3 } from "./exampleAddons/middleware";
 import {
   sayHiOnDispatch,
@@ -15,6 +16,7 @@ export default configureStore({
   reducer: {
     counter: counterReducer,
     todos: todosReducer,
+    filters: filtersReducer,
   },
   // 사용자정의 미들웨어 추가
   middleware: (getDefaultMiddleware) => {
