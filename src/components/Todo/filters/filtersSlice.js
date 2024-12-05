@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/* 필터 상태 상수 */
 export const StatusFilters = {
   All: "all",
   Active: "active",
@@ -11,13 +12,17 @@ const initialState = {
   colors: [],
 };
 
+/* 필터 슬라이스 */
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
+    // 필터 상태 변경
     statusFilterChanged(state, action) {
       state.status = action.payload;
     },
+
+    // 필터 색깔 추가, 삭제
     colorFilterChanged: {
       reducer(state, action) {
         let { color, changeType } = action.payload;
@@ -49,5 +54,8 @@ const filtersSlice = createSlice({
   },
 });
 
+/* 필터 액션 생성자 함수 */
 export const { colorFilterChanged, statusFilterChanged } = filtersSlice.actions;
+
+/* 필터 슬라이스 리듀서 */
 export default filtersSlice.reducer;

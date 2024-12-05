@@ -13,7 +13,7 @@ const initialState = todosAdapter.getInitialState({
   status: "idle", // 비활성 상태
 });
 
-// Thunk 함수
+/* thunk 함수 */
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
   const response = await client.get("/fakeApi/todos");
   return response.todos;
@@ -28,16 +28,19 @@ export const saveNewTodo = createAsyncThunk(
   }
 );
 
-// 슬라이스
+/* Todo 슬라이스 */
 const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
+    // todo 완료 처리
     todoToggled(state, action) {
       const todoId = action.payload;
       const todo = state.entities[todoId];
       todo.completed = !todo.completed;
     },
+
+    // todo 색깔 선택
     todoColorSelected: {
       reducer(state, action) {
         const { color, todoId } = action.payload;
@@ -49,12 +52,18 @@ const todosSlice = createSlice({
         };
       },
     },
+
+    // todo 삭제
     todoDeleted: todosAdapter.removeOne,
+
+    // 모든 todo 완료 처리
     allTodosCompleted(state, action) {
       Object.values(state.entities).forEach((todo) => {
         todo.completed = true;
       });
     },
+
+    // 완료된 todo 삭제 처리
     completedTodosCleared(state, action) {
       const completedIds = Object.values(state.entities)
         .filter((todo) => todo.completed)
@@ -75,6 +84,7 @@ const todosSlice = createSlice({
   },
 });
 
+/* Todo 액션 생성자 함수 */
 export const {
   allTodosCompleted,
   completedTodosCleared,
@@ -83,8 +93,10 @@ export const {
   todoToggled,
 } = todosSlice.actions;
 
+/* Todo 슬라이스 리듀서 -> store 에서 리듀서 결합 */
 export default todosSlice.reducer;
 
+/* 선택자 함수 */
 export const { selectAll: selectTodos, selectById: selectTodoById } =
   todosAdapter.getSelectors((state) => state.todos);
 
@@ -116,5 +128,5 @@ export const selectFilteredTodos = createSelector(
 
 export const selectFilteredTodoIds = createSelector(
   selectFilteredTodos,
-  (filterdTodos) => selectFilteredTodos.map((todo) => todo.id)
+  (filterdTodos) => filterdTodos.map((todo) => todo.id)
 );
