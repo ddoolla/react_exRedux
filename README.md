@@ -1,4 +1,4 @@
-# Redux 라이브러리
+# Redux 라이브러리 (Counter, Todo App)
 
 [참조] [Redux-Toolkit을 사용한 Modern Redux](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux)
 

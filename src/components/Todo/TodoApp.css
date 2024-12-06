@@ -52,6 +52,7 @@ footer h5 {
 footer .actions_section {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 footer .statusFilter ul li button {
