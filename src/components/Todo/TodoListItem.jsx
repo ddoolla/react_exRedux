@@ -34,8 +34,8 @@ const TodoListItem = ({ id }) => {
 
   return (
     <li>
-      <div style={{ display: "flex", gap: "10px" }}>
-        <div style={{ display: "flex", gap: "10px" }}>
+      <div className="todoListItem">
+        <div className="item_content" style={{ display: "flex", gap: "10px" }}>
           <input
             type="checkbox"
             checked={completed}

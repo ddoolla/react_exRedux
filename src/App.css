@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  width: 800px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.app .btnBox {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}

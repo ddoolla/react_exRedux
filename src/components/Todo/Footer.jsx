@@ -40,7 +40,7 @@ const StatusFilter = ({ value: status, onChange }) => {
   });
 
   return (
-    <div>
+    <div className="statusFilter">
       <h5>Filter by Status</h5>
       <ul>{renderedFilters}</ul>
     </div>
@@ -70,7 +70,7 @@ const ColorFilters = ({ value: colors, onChange }) => {
   });
 
   return (
-    <div>
+    <div className="colorFilters">
       <h5>Filter by color</h5>
       <form>{renderedColors}</form>
     </div>
@@ -100,8 +100,8 @@ const Footer = () => {
   const onStatusChange = (status) => dispatch(statusFilterChanged(status));
 
   return (
-    <footer style={{ display: "flex" }}>
-      <div>
+    <footer>
+      <div className="actions_section">
         <h5>Actions</h5>
         <button onClick={onMarkCompletedClicked}>Mark All Completed</button>
         <button onClick={onClearCompletedClicked}>Clear Completed</button>

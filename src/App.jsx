@@ -7,8 +7,8 @@ function App() {
   const nav = useNavigate();
 
   return (
-    <>
-      <div style={{ display: "flex", gap: "10px" }}>
+    <div className="app">
+      <div className="btnBox">
         <button onClick={() => nav("/counter")}>Counter App</button>
         <button onClick={() => nav("/todo")}>Todo App</button>
       </div>
@@ -17,7 +17,7 @@ function App() {
         <Route path="/counter" element={<Counter />} />
         <Route path="/todo" element={<TodoApp />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

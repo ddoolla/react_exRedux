@@ -8,6 +8,7 @@ import {
 } from "./counterSlice";
 import { useState } from "react";
 import store from "../../store";
+import "./Counter.css";
 
 const Counter = () => {
   // console.log("selectCount", selectCount(store.getState())); // store 와 직접 접근해서 상태 얻는 방법
@@ -19,14 +20,14 @@ const Counter = () => {
   const [incrementAmount, setIncrementAmount] = useState("2");
 
   return (
-    <div>
+    <div className="counter">
       <h1>Counter</h1>
-      <div>
-        <button onClick={() => dispatch(increment())}>+</button>
-        <span>{count}</span>
+      <div className="count_wrapper">
         <button onClick={() => dispatch(decrement())}>-</button>
+        <span>{count}</span>
+        <button onClick={() => dispatch(increment())}>+</button>
       </div>
-      <div>
+      <div className="amount_wrapper">
         <input
           type="text"
           value={incrementAmount}

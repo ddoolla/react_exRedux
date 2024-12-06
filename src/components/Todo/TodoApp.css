@@ -1,0 +1,64 @@
+/* App */
+.todoApp {
+  width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.todoApp ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  display: flex;
+  flex-direction: column;
+}
+
+header h1 {
+  text-align: center;
+}
+
+header input {
+  flex: 1;
+}
+
+/* TodoListItem */
+.todoListItem {
+  display: flex;
+  gap: 10px;
+
+  margin: 5px;
+}
+
+.todoListItem .item_content {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+/* Footer */
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer h5 {
+  text-align: center;
+}
+
+footer .actions_section {
+  display: flex;
+  flex-direction: column;
+}
+
+footer .statusFilter ul li button {
+  width: 85px;
+}
+
+footer .colorFilters form {
+  display: flex;
+  flex-direction: column;
+}
