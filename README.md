@@ -1,7 +1,5 @@
 # Redux 라이브러리 (Counter, Todo App)
 
-[참조] [Redux-Toolkit을 사용한 Modern Redux](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux)
-
 > ## 개발 환경 설정
 
 ### 1. React + Vite
@@ -602,3 +600,9 @@ const dispatch = useDispatch();
 #### \* 로컬 상태
 
 - 한 곳에서만 필요한 상태는 컴포넌트에서 관리
+
+<br/>
+
+---
+
+#### [참조] [Redux-Toolkit을 사용한 Modern Redux](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux)
